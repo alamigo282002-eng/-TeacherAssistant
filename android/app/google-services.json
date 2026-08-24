@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "683555274927",
+    "project_id": "the-helper-c6422",
+    "storage_bucket": "the-helper-c6422.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683555274927:android:2b2666a11d00939418d45a",
+        "android_client_info": {
+          "package_name": "com.example.helper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVtMcN6olAAOF2e7W9_4aUQIVD_5zmia0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
