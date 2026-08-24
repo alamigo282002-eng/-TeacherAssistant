@@ -322,11 +322,11 @@ class FinancePdfService {
 
   pw.Widget _buildPdfHeader(pw.Font fontBold, String monthName, int year, double expected, double collected, double remaining, int rate) {
     return pw.Container(
-      margin: const pw.EdgeInsets.only(bottom: 8),
-      padding: const pw.EdgeInsets.all(14),
-      decoration: pw.BoxDecoration(
-        color: const PdfColor.fromInt(0xFF022B22),
-        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+      margin: const pw.EdgeInsets.only(bottom: 12),
+      padding: const pw.EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: const pw.BoxDecoration(
+        color: PdfColor.fromInt(0xFF0D7377),
+        borderRadius: pw.BorderRadius.all(pw.Radius.circular(10)),
       ),
       child: pw.Column(
         children: [
@@ -334,22 +334,29 @@ class FinancePdfService {
             mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: [
               pw.Text(
-                'التقرير المالي - $monthName $year',
-                style: pw.TextStyle(font: fontBold, fontSize: 16, color: PdfColors.white),
+                'التقرير المالي ومتابعة الاشتراكات — $monthName $year',
+                style: pw.TextStyle(font: fontBold, fontSize: 15, color: PdfColors.white),
               ),
-              pw.Text(
-                'نسبة التحصيل: $rate٪',
-                style: pw.TextStyle(font: fontBold, fontSize: 12, color: const PdfColor.fromInt(0xFFFBBF24)),
+              pw.Container(
+                padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: const pw.BoxDecoration(
+                  color: PdfColor.fromInt(0xFF095255),
+                  borderRadius: pw.BorderRadius.all(pw.Radius.circular(6)),
+                ),
+                child: pw.Text(
+                  'نسبة التحصيل: $rate٪',
+                  style: pw.TextStyle(font: fontBold, fontSize: 11, color: const PdfColor.fromInt(0xFFFDE047)),
+                ),
               ),
             ],
           ),
-          pw.SizedBox(height: 8),
+          pw.SizedBox(height: 10),
           pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
             children: [
-              _summaryBox(fontBold, 'المتوقع', '${expected.toInt()} ج.م', PdfColors.white),
-              _summaryBox(fontBold, 'المحصّل', '${collected.toInt()} ج.م', const PdfColor.fromInt(0xFF6EE7B7)),
-              _summaryBox(fontBold, 'المتبقي', '${remaining.toInt()} ج.م', const PdfColor.fromInt(0xFFFCA5A5)),
+              _summaryBox(fontBold, 'إجمالي المتوقع', '${expected.toInt()} ج.م', PdfColors.white),
+              _summaryBox(fontBold, 'المحصّل الفعلي', '${collected.toInt()} ج.م', const PdfColor.fromInt(0xFF6EE7B7)),
+              _summaryBox(fontBold, 'المتبقي والمتأخرات', '${remaining.toInt()} ج.م', const PdfColor.fromInt(0xFFFCA5A5)),
             ],
           ),
         ],
@@ -358,12 +365,19 @@ class FinancePdfService {
   }
 
   pw.Widget _summaryBox(pw.Font fontBold, String title, String value, PdfColor valueColor) {
-    return pw.Column(
-      children: [
-        pw.Text(title, style: pw.TextStyle(fontSize: 9, color: PdfColors.white.shade(0.85))),
-        pw.SizedBox(height: 2),
-        pw.Text(value, style: pw.TextStyle(font: fontBold, fontSize: 12, color: valueColor)),
-      ],
+    return pw.Container(
+      padding: const pw.EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+      decoration: const pw.BoxDecoration(
+        color: PdfColor.fromInt(0x33000000),
+        borderRadius: pw.BorderRadius.all(pw.Radius.circular(6)),
+      ),
+      child: pw.Column(
+        children: [
+          pw.Text(title, style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.white)),
+          pw.SizedBox(height: 2),
+          pw.Text(value, style: pw.TextStyle(font: fontBold, fontSize: 12, color: valueColor)),
+        ],
+      ),
     );
   }
 

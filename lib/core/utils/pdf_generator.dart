@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import '../../core/constants/app_constants.dart';
 import '../../data/models/group_model.dart';
 import '../../data/models/note_model.dart';
 import '../../data/models/student_model.dart';
@@ -11,7 +12,7 @@ import '../../data/models/attendance_model.dart';
 import '../../features/certificates/certificate_model.dart';
 
 class PdfGenerator {
-  /// Generate a PDF report for a student
+  /// Generate a Premium Executive PDF report for a student
   static Future<File> generateStudentReport(
     StudentModel student,
     List<AttendanceModel> attendance,
@@ -19,7 +20,7 @@ class PdfGenerator {
     List<NoteModel> notes,
   ) async {
     final pdf = pw.Document();
-    
+
     pw.Font font;
     pw.Font fontBold;
     try {
@@ -30,10 +31,22 @@ class PdfGenerator {
       fontBold = pw.Font.helveticaBold();
     }
 
+    final primaryColor = PdfColor.fromInt(0xFF0D7377);
+    final primaryLight = PdfColor.fromInt(0xFFE6F7F7);
+    final accentGreen = PdfColor.fromInt(0xFF10B981);
+    final accentGreenLight = PdfColor.fromInt(0xFFE8F5E9);
+    final accentOrange = PdfColor.fromInt(0xFFF59E0B);
+    final accentOrangeLight = PdfColor.fromInt(0xFFFEF3C7);
+    final textDark = PdfColor.fromInt(0xFF0F172A);
+    final textMuted = PdfColor.fromInt(0xFF64748B);
+    final bgLight = PdfColor.fromInt(0xFFF8FAFC);
+    final borderCol = PdfColor.fromInt(0xFFE2E8F0);
+
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
         textDirection: pw.TextDirection.rtl,
+        margin: const pw.EdgeInsets.all(28),
         theme: pw.ThemeData.withFont(
           base: font,
           bold: fontBold,
@@ -41,80 +54,284 @@ class PdfGenerator {
         build: (context) {
           final presentCount = attendance.where((a) => a.status.name == 'present').length;
           final absentCount = attendance.where((a) => a.status.name == 'absent').length;
+          final totalSessions = presentCount + absentCount;
+          final attRate = totalSessions > 0 ? ((presentCount / totalSessions) * 100).round() : 100;
+
+          // Calc exam average
+          double totalMarksObtained = 0;
+          double totalMarksPossible = 0;
+          for (final e in exams) {
+            final num? m = e['marks'] as num?;
+            final num? t = (e['total_marks'] as num?) ?? (e['total'] as num?);
+            if (m != null) {
+              totalMarksObtained += m.toDouble();
+              totalMarksPossible += (t?.toDouble() ?? 100.0);
+            }
+          }
+          final examAvgPercent = totalMarksPossible > 0 ? ((totalMarksObtained / totalMarksPossible) * 100).toStringAsFixed(1) : '-';
 
           return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            crossAxisAlignment: pw.CrossAxisAlignment.stretch,
             children: [
-              pw.Header(
-                level: 0,
-                child: pw.Text('تقرير أداء الطالب', style: pw.TextStyle(font: fontBold, fontSize: 24, color: PdfColors.teal)),
-              ),
-              pw.SizedBox(height: 10),
-              pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                children: [
-                  pw.Text('الاسم: ${student.name}', style: pw.TextStyle(font: fontBold, fontSize: 16)),
-                  pw.Text('النقاط: ${student.points}', style: pw.TextStyle(font: fontBold, fontSize: 16, color: PdfColors.orange)),
-                ],
-              ),
-              pw.SizedBox(height: 5),
-              pw.Text('الهاتف: ${student.phone.isNotEmpty ? student.phone : "-"}', style: const pw.TextStyle(fontSize: 12)),
-              pw.Text('هاتف ولي الأمر: ${student.parentPhone.isNotEmpty ? student.parentPhone : "-"}', style: const pw.TextStyle(fontSize: 12)),
-              pw.SizedBox(height: 20),
-              
-              // Attendance stats
-              pw.Text('إحصائيات الحضور والغياب:', style: pw.TextStyle(font: fontBold, fontSize: 14, color: PdfColors.grey700)),
-              pw.SizedBox(height: 5),
-              pw.Text('إجمالي أيام الحضور: $presentCount', style: const pw.TextStyle(fontSize: 12)),
-              pw.Text('إجمالي أيام الغياب: $absentCount', style: const pw.TextStyle(fontSize: 12)),
-              pw.SizedBox(height: 20),
-              
-              // Exams
-              if (exams.isNotEmpty) ...[
-                pw.Text('نتائج الاختبارات:', style: pw.TextStyle(font: fontBold, fontSize: 14, color: PdfColors.grey700)),
-                pw.SizedBox(height: 5),
-                pw.TableHelper.fromTextArray(
-                  context: context,
-                  border: pw.TableBorder.all(),
-                  headerStyle: pw.TextStyle(font: fontBold),
-                  cellStyle: pw.TextStyle(font: font),
-                  headerDecoration: const pw.BoxDecoration(color: PdfColors.grey300),
-                  data: [
-                    ['الاختبار', 'الدرجة', 'النسبة'],
-                    ...exams.map((e) {
-                      final examName = e['name']?.toString() ?? 'اختبار';
-                      final num? rawMarks = e['marks'] as num?;
-                      final num? rawTotal = (e['total_marks'] as num?) ?? (e['total'] as num?);
-                      final total = rawTotal?.toDouble() ?? 100.0;
-                      
-                      String marksStr = '-';
-                      String percentStr = '-';
-                      if (rawMarks != null) {
-                        final marks = rawMarks.toDouble();
-                        marksStr = '$marks / ${total.toInt()}';
-                        if (total > 0) {
-                          percentStr = '${((marks / total) * 100).toStringAsFixed(1)}%';
-                        }
-                      }
-                      return [examName, marksStr, percentStr];
-                    }),
+              // 1. Premium Header Banner
+              pw.Container(
+                padding: const pw.EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                decoration: pw.BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: const pw.BorderRadius.all(pw.Radius.circular(12)),
+                ),
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          'تقرير أداء الطالب الشامل',
+                          style: pw.TextStyle(font: fontBold, fontSize: 20, color: PdfColors.white),
+                        ),
+                        pw.SizedBox(height: 4),
+                        pw.Text(
+                          'سجل المتابعة الأكاديمية والسلوكية الرسمية',
+                          style: const pw.TextStyle(fontSize: 10, color: PdfColors.white),
+                        ),
+                      ],
+                    ),
+                    pw.Container(
+                      padding: const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: pw.BoxDecoration(
+                        color: PdfColor.fromInt(0xFF095255),
+                        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+                      ),
+                      child: pw.Text(
+                        'مُساعِد المُعلِّم',
+                        style: pw.TextStyle(font: fontBold, fontSize: 11, color: PdfColors.white),
+                      ),
+                    ),
                   ],
                 ),
-                pw.SizedBox(height: 20),
+              ),
+              pw.SizedBox(height: 14),
+
+              // 2. Student Info Card
+              pw.Container(
+                padding: const pw.EdgeInsets.all(14),
+                decoration: pw.BoxDecoration(
+                  color: bgLight,
+                  borderRadius: const pw.BorderRadius.all(pw.Radius.circular(10)),
+                  border: pw.Border.all(color: borderCol, width: 1),
+                ),
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Row(
+                          children: [
+                            pw.Text('اسم الطالب: ', style: pw.TextStyle(font: fontBold, fontSize: 13, color: textDark)),
+                            pw.Text(student.name, style: pw.TextStyle(font: fontBold, fontSize: 14, color: primaryColor)),
+                          ],
+                        ),
+                        pw.SizedBox(height: 4),
+                        pw.Text('هاتف الطالب: ${student.phone.isNotEmpty ? student.phone : "-"}', style: pw.TextStyle(fontSize: 10, color: textMuted)),
+                      ],
+                    ),
+                    pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.end,
+                      children: [
+                        pw.Text('هاتف ولي الأمر: ${student.parentPhone.isNotEmpty ? student.parentPhone : "-"}', style: pw.TextStyle(fontSize: 10, color: textMuted)),
+                        pw.SizedBox(height: 4),
+                        pw.Text('تاريخ التقرير: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}', style: pw.TextStyle(fontSize: 10, color: textMuted)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 14),
+
+              // 3. KPI Metric Summary Cards (4 Cards)
+              pw.Row(
+                children: [
+                  // Card 1: Attendance Rate
+                  pw.Expanded(
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                      decoration: pw.BoxDecoration(
+                        color: accentGreenLight,
+                        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+                        border: pw.Border.all(color: accentGreen, width: 0.8),
+                      ),
+                      child: pw.Column(
+                        children: [
+                          pw.Text('نسبة الحضور', style: pw.TextStyle(font: fontBold, fontSize: 10, color: textDark)),
+                          pw.SizedBox(height: 2),
+                          pw.Text('$attRate%', style: pw.TextStyle(font: fontBold, fontSize: 16, color: accentGreen)),
+                          pw.Text('حضور: $presentCount | غياب: $absentCount', style: pw.TextStyle(fontSize: 8, color: textMuted)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  pw.SizedBox(width: 8),
+
+                  // Card 2: Points & Evaluation
+                  pw.Expanded(
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                      decoration: pw.BoxDecoration(
+                        color: accentOrangeLight,
+                        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+                        border: pw.Border.all(color: accentOrange, width: 0.8),
+                      ),
+                      child: pw.Column(
+                        children: [
+                          pw.Text('نقاط التميز', style: pw.TextStyle(font: fontBold, fontSize: 10, color: textDark)),
+                          pw.SizedBox(height: 2),
+                          pw.Text('${student.points} ⭐', style: pw.TextStyle(font: fontBold, fontSize: 16, color: accentOrange)),
+                          pw.Text('تقييم سلوكي متميز', style: pw.TextStyle(fontSize: 8, color: textMuted)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  pw.SizedBox(width: 8),
+
+                  // Card 3: Exams Average
+                  pw.Expanded(
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                      decoration: pw.BoxDecoration(
+                        color: primaryLight,
+                        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+                        border: pw.Border.all(color: primaryColor, width: 0.8),
+                      ),
+                      child: pw.Column(
+                        children: [
+                          pw.Text('متوسط الاختبارات', style: pw.TextStyle(font: fontBold, fontSize: 10, color: textDark)),
+                          pw.SizedBox(height: 2),
+                          pw.Text(examAvgPercent != '-' ? '$examAvgPercent%' : '-', style: pw.TextStyle(font: fontBold, fontSize: 16, color: primaryColor)),
+                          pw.Text('عدد الاختبارات: ${exams.length}', style: pw.TextStyle(fontSize: 8, color: textMuted)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              pw.SizedBox(height: 16),
+
+              // 4. Exams Table Section
+              if (exams.isNotEmpty) ...[
+                pw.Text('سجل نتائج الاختبارات والكويزات:', style: pw.TextStyle(font: fontBold, fontSize: 12, color: primaryColor)),
+                pw.SizedBox(height: 6),
+                pw.TableHelper.fromTextArray(
+                  context: context,
+                  border: pw.TableBorder(
+                    horizontalInside: pw.BorderSide(color: borderCol, width: 0.8),
+                  ),
+                  headerStyle: pw.TextStyle(font: fontBold, fontSize: 10, color: PdfColors.white),
+                  cellStyle: pw.TextStyle(font: font, fontSize: 9.5),
+                  headerDecoration: pw.BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: const pw.BorderRadius.vertical(top: pw.Radius.circular(6)),
+                  ),
+                  rowDecoration: const pw.BoxDecoration(color: PdfColors.white),
+                  cellAlignment: pw.Alignment.center,
+                  cellPadding: const pw.EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  headers: ['اسم الاختبار', 'الدرجة المحصلة', 'الدرجة النهائية', 'النسبة المئوية', 'التقدير'],
+                  data: exams.map((e) {
+                    final examName = e['name']?.toString() ?? 'اختبار';
+                    final num? rawMarks = e['marks'] as num?;
+                    final num? rawTotal = (e['total_marks'] as num?) ?? (e['total'] as num?);
+                    final total = rawTotal?.toDouble() ?? 100.0;
+
+                    String marksStr = '-';
+                    String totalStr = total.toInt().toString();
+                    String percentStr = '-';
+                    String gradeStr = '-';
+
+                    if (rawMarks != null) {
+                      final marks = rawMarks.toDouble();
+                      marksStr = marks.toInt().toString();
+                      if (total > 0) {
+                        final p = (marks / total) * 100;
+                        percentStr = '${p.toStringAsFixed(1)}%';
+                        if (p >= 90) {
+                          gradeStr = 'ممتاز 🌟';
+                        } else if (p >= 80) {
+                          gradeStr = 'جيد جداً';
+                        } else if (p >= 65) {
+                          gradeStr = 'جيد';
+                        } else if (p >= 50) {
+                          gradeStr = 'مقبول';
+                        } else {
+                          gradeStr = 'يحتاج لمتابعة';
+                        }
+                      }
+                    }
+                    return [examName, marksStr, totalStr, percentStr, gradeStr];
+                  }).toList(),
+                ),
+                pw.SizedBox(height: 14),
               ],
 
-              // Notes
+              // 5. Notes & Observations
               if (notes.isNotEmpty) ...[
-                pw.Text('الملاحظات:', style: pw.TextStyle(font: fontBold, fontSize: 14, color: PdfColors.grey700)),
-                pw.SizedBox(height: 5),
-                ...notes.map((n) => pw.Bullet(text: n.content, style: const pw.TextStyle(fontSize: 12))),
+                pw.Text('الملاحظات والتوجيهات السلوكية:', style: pw.TextStyle(font: fontBold, fontSize: 12, color: primaryColor)),
+                pw.SizedBox(height: 6),
+                pw.Container(
+                  padding: const pw.EdgeInsets.all(10),
+                  decoration: pw.BoxDecoration(
+                    color: bgLight,
+                    borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+                    border: pw.Border.all(color: borderCol, width: 0.8),
+                  ),
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: notes.map((n) => pw.Padding(
+                          padding: const pw.EdgeInsets.symmetric(vertical: 2),
+                          child: pw.Row(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              pw.Text('• ', style: pw.TextStyle(font: fontBold, color: primaryColor)),
+                              pw.Expanded(child: pw.Text(n.content, style: pw.TextStyle(fontSize: 9.5, color: textDark))),
+                            ],
+                          ),
+                        )).toList(),
+                  ),
+                ),
+                pw.SizedBox(height: 14),
               ],
 
               pw.Spacer(),
-              pw.Divider(),
-              pw.Align(
-                alignment: pw.Alignment.center,
-                child: pw.Text('تم إنشاء هذا التقرير بواسطة تطبيق مُساعِد المُعلِّم', style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey)),
+
+              // 6. Signatures & Official Footer
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.center,
+                    children: [
+                      pw.Text('توقيع ولي الأمر', style: pw.TextStyle(font: fontBold, fontSize: 10, color: textMuted)),
+                      pw.SizedBox(height: 20),
+                      pw.Container(width: 120, height: 1, color: borderCol),
+                    ],
+                  ),
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.center,
+                    children: [
+                      pw.Text('توقيع وختم المعلم', style: pw.TextStyle(font: fontBold, fontSize: 10, color: textMuted)),
+                      pw.SizedBox(height: 20),
+                      pw.Container(width: 120, height: 1, color: borderCol),
+                    ],
+                  ),
+                ],
+              ),
+              pw.SizedBox(height: 10),
+              pw.Divider(color: borderCol, thickness: 0.8),
+              pw.Center(
+                child: pw.Text(
+                  'تم استخراج هذا التقرير تلقائياً بواسطة تطبيق مُساعِد المُعلِّم (Teacher Assistant)',
+                  style: pw.TextStyle(fontSize: 8.5, color: textMuted),
+                ),
               ),
             ],
           );
@@ -128,13 +345,13 @@ class PdfGenerator {
     return file;
   }
 
-  /// Generate a PDF report for a group
+  /// Generate a Premium Executive PDF report for a group
   static Future<File> generateGroupReport(
     GroupModel group,
     List<StudentModel> students,
   ) async {
     final pdf = pw.Document();
-    
+
     pw.Font font;
     pw.Font fontBold;
     try {
@@ -145,55 +362,103 @@ class PdfGenerator {
       fontBold = pw.Font.helveticaBold();
     }
 
+    final primaryColor = PdfColor.fromInt(0xFF0D7377);
+    final bgLight = PdfColor.fromInt(0xFFF8FAFC);
+    final borderCol = PdfColor.fromInt(0xFFE2E8F0);
+    final textDark = PdfColor.fromInt(0xFF0F172A);
+    final textMuted = PdfColor.fromInt(0xFF64748B);
+
     pdf.addPage(
-      pw.Page(
+      pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         textDirection: pw.TextDirection.rtl,
+        margin: const pw.EdgeInsets.all(28),
         theme: pw.ThemeData.withFont(
           base: font,
           bold: fontBold,
         ),
-        build: (context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (context) => pw.Container(
+          padding: const pw.EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          margin: const pw.EdgeInsets.only(bottom: 14),
+          decoration: pw.BoxDecoration(
+            color: primaryColor,
+            borderRadius: const pw.BorderRadius.all(pw.Radius.circular(10)),
+          ),
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: [
-              pw.Header(
-                level: 0,
-                child: pw.Text('تقرير المجموعة', style: pw.TextStyle(font: fontBold, fontSize: 24, color: PdfColors.teal)),
+              pw.Text(
+                'كشف وتقرير مجموعة: ${group.name}',
+                style: pw.TextStyle(font: fontBold, fontSize: 16, color: PdfColors.white),
               ),
-              pw.SizedBox(height: 16),
-              pw.Text('المجموعة: ${group.name}', style: pw.TextStyle(font: fontBold, fontSize: 16)),
-              if (group.subject != null && group.subject!.isNotEmpty)
-                pw.Text('المادة: ${group.subject!}', style: const pw.TextStyle(fontSize: 14)),
-              pw.Text('إجمالي الطلاب: ${students.length}', style: const pw.TextStyle(fontSize: 14)),
-              pw.SizedBox(height: 20),
-              pw.Text('قائمة الطلاب:', style: pw.TextStyle(font: fontBold, fontSize: 16, color: PdfColors.grey700)),
-              pw.SizedBox(height: 10),
-              pw.TableHelper.fromTextArray(
-                context: context,
-                border: pw.TableBorder.all(),
-                headerStyle: pw.TextStyle(font: fontBold),
-                cellStyle: pw.TextStyle(font: font),
-                headerDecoration: const pw.BoxDecoration(color: PdfColors.grey300),
-                data: [
-                  ['#', 'الاسم', 'الهاتف', 'النقاط'],
-                  ...students.asMap().entries.map((e) => [
-                        (e.key + 1).toString(),
-                        e.value.name,
-                        e.value.phone.isNotEmpty ? e.value.phone : '-',
-                        e.value.points.toString(),
-                      ]),
-                ],
-              ),
-              pw.SizedBox(height: 20),
-              pw.Divider(),
-              pw.Align(
-                alignment: pw.Alignment.center,
-                child: pw.Text('تم إنشاء هذا التقرير بواسطة تطبيق مُساعِد المُعلِّم', style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey)),
+              pw.Text(
+                'إجمالي الطلاب: ${students.length}',
+                style: pw.TextStyle(font: fontBold, fontSize: 11, color: PdfColors.white),
               ),
             ],
-          );
-        },
+          ),
+        ),
+        footer: (context) => pw.Column(
+          children: [
+            pw.Divider(color: borderCol, thickness: 0.8),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('تطبيق مُساعِد المُعلِّم', style: pw.TextStyle(fontSize: 8.5, color: textMuted)),
+                pw.Text('صفحة ${context.pageNumber} من ${context.pagesCount}', style: pw.TextStyle(fontSize: 8.5, color: textMuted)),
+              ],
+            ),
+          ],
+        ),
+        build: (context) => [
+          // Group Details Summary
+          pw.Container(
+            padding: const pw.EdgeInsets.all(12),
+            margin: const pw.EdgeInsets.only(bottom: 14),
+            decoration: pw.BoxDecoration(
+              color: bgLight,
+              borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+              border: pw.Border.all(color: borderCol, width: 0.8),
+            ),
+            child: pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                if (group.subject != null && group.subject!.isNotEmpty)
+                  pw.Text('المادة: ${group.subject}', style: pw.TextStyle(font: fontBold, fontSize: 11, color: textDark)),
+                pw.Text('النوع: ${group.type.label}', style: pw.TextStyle(fontSize: 11, color: textMuted)),
+                pw.Text('تاريخ التقرير: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}', style: pw.TextStyle(fontSize: 10, color: textMuted)),
+              ],
+            ),
+          ),
+
+          // Students Table
+          pw.TableHelper.fromTextArray(
+            context: context,
+            border: pw.TableBorder(
+              horizontalInside: pw.BorderSide(color: borderCol, width: 0.8),
+            ),
+            headerStyle: pw.TextStyle(font: fontBold, fontSize: 10, color: PdfColors.white),
+            cellStyle: pw.TextStyle(font: font, fontSize: 9.5),
+            headerDecoration: pw.BoxDecoration(
+              color: primaryColor,
+              borderRadius: const pw.BorderRadius.vertical(top: pw.Radius.circular(6)),
+            ),
+            cellAlignment: pw.Alignment.center,
+            cellPadding: const pw.EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+            headers: ['#', 'اسم الطالب', 'هاتف الطالب', 'هاتف ولي الأمر', 'النقاط', 'الحالة'],
+            data: students.asMap().entries.map((e) {
+              final s = e.value;
+              return [
+                (e.key + 1).toString(),
+                s.name,
+                s.phone.isNotEmpty ? s.phone : '-',
+                s.parentPhone.isNotEmpty ? s.parentPhone : '-',
+                '${s.points} ⭐',
+                s.status.name == 'active' ? 'نشط' : 'غير نشط',
+              ];
+            }).toList(),
+          ),
+        ],
       ),
     );
 
