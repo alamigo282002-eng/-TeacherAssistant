@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مساعد المعلم — رفيقك الذكي لإدارة الحصص والطلاب</title>
-  <meta name="description" content="تطبيق مساعد المعلم: النظام المتكامل لإدارة المجموعات، الحضور والغياب، الدرجات، تقارير PDF والماليات — أوفلاين 100% بدون إنترنت">
+  <title>مساعد المعلم — تطبيقك الذكي لإدارة الحصص والطلاب</title>
+  <meta name="description" content="تطبيق مساعد المعلم: رفيقك اليومي لإدارة الحصص، رصد الغياب، الدرجات، والماليات من غير نت خالص 100%">
 
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="assets/app_icon.jpg">
@@ -15,47 +15,73 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================
+       THEME VARIABLES (Light Mode is Default)
+       ========================================= */
     :root {
+      --bg: #F8FAFC;
+      --bg-surface: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-card-sub: #F1F5F9;
+      --primary: #0D7377;
+      --primary-hover: #095255;
+      --primary-light: #14FFEC;
+      --primary-subtle: #E6F7F7;
+      --text-title: #0F172A;
+      --text-body: #334155;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --border-focus: #0D7377;
+      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 8px 24px rgba(13, 115, 119, 0.08);
+      --shadow-lg: 0 16px 36px rgba(15, 23, 42, 0.1);
+      --accent-green: #10B981;
+      --accent-gold: #F59E0B;
+      --accent-red: #EF4444;
+      --radius: 18px;
+    }
+
+    [data-theme="dark"] {
       --bg: #0B1315;
       --bg-surface: #101F22;
-      --bg-card: #152A2E;
-      --bg-card-hover: #1B353A;
-      --primary: #0D7377;
+      --bg-card: #14272B;
+      --bg-card-sub: #183338;
+      --primary: #14FFEC;
+      --primary-hover: #0D7377;
       --primary-light: #14FFEC;
-      --primary-glow: rgba(20, 255, 236, 0.18);
-      --accent-gold: #F59E0B;
-      --accent-green: #10B981;
-      --accent-red: #EF4444;
-      --accent-blue: #3B82F6;
-      --text-main: #FFFFFF;
+      --primary-subtle: rgba(20, 255, 236, 0.1);
+      --text-title: #FFFFFF;
+      --text-body: #E2E8F0;
       --text-muted: #94A3B8;
-      --border: rgba(20, 255, 236, 0.12);
-      --border-active: rgba(20, 255, 236, 0.45);
-      --radius: 18px;
+      --border: rgba(20, 255, 236, 0.15);
+      --border-focus: #14FFEC;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.6);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
     }
 
     body {
       font-family: 'Tajawal', sans-serif;
       background-color: var(--bg);
-      color: var(--text-main);
-      line-height: 1.6;
+      color: var(--text-body);
+      line-height: 1.65;
       overflow-x: hidden;
     }
 
     h1, h2, h3, h4, .font-cairo {
       font-family: 'Cairo', sans-serif;
+      color: var(--text-title);
     }
 
-    /* Container */
     .container {
-      max-width: 1140px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 0 20px;
     }
@@ -64,11 +90,11 @@
     header {
       position: sticky;
       top: 0;
-      background: rgba(11, 19, 21, 0.92);
-      backdrop-filter: blur(12px);
+      background: var(--bg-surface);
       border-bottom: 1px solid var(--border);
       z-index: 100;
-      padding: 14px 0;
+      box-shadow: var(--shadow-sm);
+      padding: 12px 0;
     }
 
     .nav-wrap {
@@ -82,33 +108,56 @@
       align-items: center;
       gap: 12px;
       text-decoration: none;
-      color: #fff;
     }
 
     .brand img {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
-      border: 1.5px solid var(--primary-light);
-      box-shadow: 0 0 12px var(--primary-glow);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .brand-name {
+    .brand-text h1 {
       font-size: 1.25rem;
       font-weight: 800;
-      color: #fff;
+      line-height: 1.2;
+    }
+
+    .brand-text span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .nav-download-btn {
-      background: linear-gradient(135deg, #0D7377, #14FFEC);
-      color: #051A1C;
-      font-weight: 800;
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      background: var(--bg-card-sub);
+      border: 1px solid var(--border);
+      color: var(--text-title);
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--border-focus);
+    }
+
+    .btn-nav-download {
+      background: #0D7377;
+      color: #FFFFFF !important;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
       font-size: 0.95rem;
       padding: 9px 20px;
       border-radius: 12px;
@@ -116,53 +165,56 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .nav-download-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(20, 255, 236, 0.35);
+    .btn-nav-download:hover {
+      background: #095255;
     }
 
-    /* Hero */
+    /* Hero Section */
     .hero {
-      padding: 60px 0 40px;
+      padding: 55px 0 35px;
       text-align: center;
-      position: relative;
     }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(20, 255, 236, 0.08);
-      border: 1px solid rgba(20, 255, 236, 0.25);
-      color: var(--primary-light);
+      gap: 6px;
+      background: var(--primary-subtle);
+      border: 1px solid var(--border);
+      color: #0D7377;
       padding: 6px 16px;
-      border-radius: 30px;
-      font-size: 0.88rem;
+      border-radius: 25px;
+      font-size: 0.9rem;
       font-weight: 700;
       margin-bottom: 20px;
     }
 
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
+    [data-theme="dark"] .hero-badge {
+      color: var(--primary-light);
+    }
+
+    .hero h2 {
+      font-size: clamp(2rem, 4.5vw, 3rem);
       font-weight: 900;
-      line-height: 1.25;
-      margin-bottom: 18px;
+      line-height: 1.3;
+      margin-bottom: 16px;
     }
 
-    .hero h1 .highlight {
-      background: linear-gradient(135deg, #14FFEC, #2DD4BF);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .hero h2 .teal-text {
+      color: #0D7377;
     }
 
-    .hero-sub {
+    [data-theme="dark"] .hero h2 .teal-text {
+      color: var(--primary-light);
+    }
+
+    .hero-desc {
       font-size: 1.15rem;
       color: var(--text-muted);
-      max-width: 680px;
-      margin: 0 auto 32px;
+      max-width: 650px;
+      margin: 0 auto 30px;
       font-weight: 500;
     }
 
@@ -171,361 +223,330 @@
       justify-content: center;
       gap: 14px;
       flex-wrap: wrap;
-      margin-bottom: 36px;
+      margin-bottom: 35px;
     }
 
-    .btn-main {
-      background: linear-gradient(135deg, #0D7377, #14FFEC);
-      color: #051A1C;
+    .btn-primary {
+      background: #0D7377;
+      color: #FFFFFF;
+      font-family: 'Cairo', sans-serif;
       font-size: 1.1rem;
       font-weight: 800;
-      padding: 14px 32px;
+      padding: 14px 34px;
       border-radius: 14px;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 8px 24px rgba(20, 255, 236, 0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: var(--shadow-md);
     }
 
-    .btn-main:hover {
+    .btn-primary:hover {
+      background: #095255;
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(20, 255, 236, 0.45);
     }
 
-    .btn-outline {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: #fff;
+    .btn-secondary {
+      background: var(--bg-card-sub);
+      border: 1px solid var(--border);
+      color: var(--text-title);
+      font-family: 'Cairo', sans-serif;
       font-size: 1.1rem;
       font-weight: 700;
-      padding: 14px 28px;
+      padding: 14px 26px;
       border-radius: 14px;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: background 0.2s, border-color 0.2s;
     }
 
-    .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.09);
-      border-color: rgba(255, 255, 255, 0.35);
+    .btn-secondary:hover {
+      border-color: var(--border-focus);
     }
 
-    .pills-strip {
+    /* Fast Badges Strip */
+    .badges-strip {
       display: flex;
       justify-content: center;
-      gap: 18px;
+      gap: 16px;
       flex-wrap: wrap;
-      margin-top: 10px;
     }
 
-    .pill-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .badge-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      padding: 8px 16px;
+      padding: 8px 18px;
       border-radius: 12px;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 600;
-      color: #CBD5E1;
+      color: var(--text-title);
+      box-shadow: var(--shadow-sm);
     }
 
     /* =========================================
-       INTERACTIVE APP SHOWCASE (Phone Simulator)
+       INTERACTIVE APP SHOWCASE
        ========================================= */
     .showcase-section {
-      padding: 50px 0 70px;
+      padding: 50px 0;
     }
 
-    .section-title {
+    .section-head {
       text-align: center;
-      margin-bottom: 36px;
+      margin-bottom: 32px;
     }
 
-    .section-title h2 {
-      font-size: 2.1rem;
+    .section-head h3 {
+      font-size: 1.9rem;
       font-weight: 800;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
-    .section-title p {
+    .section-head p {
       color: var(--text-muted);
       font-size: 1.05rem;
     }
 
-    .tabs-nav {
+    /* Tabs Bar */
+    .tab-pills {
       display: flex;
       justify-content: center;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
     }
 
-    .tab-btn {
+    .tab-item {
       background: var(--bg-surface);
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       color: var(--text-muted);
       font-family: 'Cairo', sans-serif;
       font-weight: 700;
       font-size: 0.95rem;
-      padding: 10px 20px;
+      padding: 9px 18px;
       border-radius: 12px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.25s ease;
     }
 
-    .tab-btn:hover {
-      background: var(--bg-card);
-      color: #fff;
+    .tab-item:hover {
+      border-color: #0D7377;
+      color: var(--text-title);
     }
 
-    .tab-btn.active {
-      background: linear-gradient(135deg, rgba(13, 115, 119, 0.8), rgba(20, 255, 236, 0.2));
-      border-color: var(--primary-light);
-      color: #fff;
-      box-shadow: 0 4px 16px var(--primary-glow);
+    .tab-item.active {
+      background: #0D7377;
+      border-color: #0D7377;
+      color: #FFFFFF;
+      box-shadow: var(--shadow-sm);
     }
 
-    .device-container {
+    /* Interactive Showcase Flex */
+    .showcase-layout {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 40px;
+      gap: 36px;
       flex-wrap: wrap;
     }
 
-    /* Interactive Phone Frame */
-    .phone-frame {
-      width: 360px;
-      min-height: 590px;
-      background: #081214;
-      border: 3.5px solid #1E3B40;
-      border-radius: 38px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 35px var(--primary-glow);
-      overflow: hidden;
+    /* Phone Mockup Frame */
+    .phone-mockup {
+      width: 350px;
+      min-height: 560px;
+      background: var(--bg-surface);
+      border: 3.5px solid var(--text-title);
+      border-radius: 36px;
+      box-shadow: var(--shadow-lg);
       display: flex;
       flex-direction: column;
-      position: relative;
+      overflow: hidden;
     }
 
-    /* Phone Speaker & Notch */
-    .phone-top-bar {
-      height: 28px;
-      background: #081214;
+    .phone-notch-bar {
+      height: 26px;
+      background: var(--bg-card-sub);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 22px;
-      font-size: 11px;
-      color: #94A3B8;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0 20px;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: bold;
     }
 
-    .phone-notch {
-      width: 80px;
-      height: 14px;
-      background: #04090A;
-      border-radius: 0 0 10px 10px;
-      margin: 0 auto;
+    .phone-notch-center {
+      width: 60px;
+      height: 10px;
+      background: var(--border);
+      border-radius: 0 0 6px 6px;
     }
 
-    .phone-screen {
-      flex: 1;
+    .phone-body {
       padding: 16px;
+      flex: 1;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      overflow-y: auto;
-      background: #0A1719;
+      background: var(--bg);
     }
 
-    /* Tab Content Wrappers */
-    .screen-view {
+    /* Mock Views */
+    .mock-view {
       display: none;
       flex-direction: column;
-      gap: 12px;
-      animation: fadeIn 0.3s ease;
+      gap: 10px;
+      animation: fadeIn 0.25s ease;
     }
 
-    .screen-view.active {
+    .mock-view.active {
       display: flex;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Mockup UI Components */
-    .mock-header {
-      background: linear-gradient(135deg, #0D7377, #134E4A);
-      border-radius: 16px;
-      padding: 14px;
-      color: #fff;
-    }
-
-    .mock-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
     .mock-card {
-      background: #112629;
-      border: 1px solid rgba(20, 255, 236, 0.1);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
     }
 
-    .mock-row {
+    .mock-card-header {
+      background: #0D7377;
+      color: #FFFFFF;
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .flex-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .badge-tag {
+    .tag-badge {
       padding: 3px 8px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 700;
     }
 
-    .badge-teal {
-      background: rgba(20, 255, 236, 0.15);
-      color: var(--primary-light);
-    }
+    .tag-green { background: #DCFCE7; color: #15803D; }
+    .tag-gold { background: #FEF3C7; color: #B45309; }
+    .tag-teal { background: var(--primary-subtle); color: #0D7377; }
 
-    .badge-gold {
-      background: rgba(245, 158, 11, 0.15);
-      color: var(--accent-gold);
-    }
+    [data-theme="dark"] .tag-green { background: rgba(16,185,129,0.2); color: #34D399; }
+    [data-theme="dark"] .tag-gold { background: rgba(245,158,11,0.2); color: #FBBF24; }
+    [data-theme="dark"] .tag-teal { background: rgba(20,255,236,0.2); color: #14FFEC; }
 
-    .badge-green {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-green);
-    }
-
-    /* Interactive Student Item in Mockup */
-    .mock-student-item {
-      background: #0E2023;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+    /* Student Item Mock */
+    .student-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 10px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background 0.2s;
     }
 
-    .mock-btn-group {
-      display: flex;
-      gap: 4px;
-    }
-
-    .mock-btn-action {
+    .btn-action {
       border: none;
       padding: 4px 8px;
       border-radius: 6px;
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
       color: #fff;
     }
 
-    .btn-present { background: #065F46; }
-    .btn-present.selected { background: #10B981; box-shadow: 0 0 8px #10B981; }
+    .btn-act-present { background: #94A3B8; }
+    .btn-act-present.active { background: #10B981; }
 
-    .btn-absent { background: #7F1D1D; }
-    .btn-absent.selected { background: #EF4444; box-shadow: 0 0 8px #EF4444; }
+    .btn-act-absent { background: #94A3B8; }
+    .btn-act-absent.active { background: #EF4444; }
 
-    .btn-hw { background: #78350F; }
-    .btn-hw.selected { background: #F59E0B; box-shadow: 0 0 8px #F59E0B; }
+    .btn-act-hw { background: #CBD5E1; color: #334155; }
+    .btn-act-hw.active { background: #F59E0B; color: #fff; }
 
-    /* Features Explanatory Panel Beside Phone */
-    .showcase-desc-box {
+    /* Details Panel */
+    .details-panel {
       max-width: 440px;
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
 
-    .desc-item-card {
+    .detail-card {
       background: var(--bg-surface);
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: 16px;
       padding: 20px;
-      transition: border-color 0.25s, transform 0.25s;
+      box-shadow: var(--shadow-sm);
     }
 
-    .desc-item-card.highlighted {
-      border-color: var(--primary-light);
-      box-shadow: 0 6px 20px var(--primary-glow);
+    .detail-card.active {
+      border-color: #0D7377;
+      box-shadow: var(--shadow-md);
     }
 
-    .desc-item-card h3 {
+    .detail-card h4 {
       font-size: 1.25rem;
       margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
-    .desc-item-card p {
+    .detail-card p {
       color: var(--text-muted);
       font-size: 0.95rem;
     }
 
-    /* Grid of Key Benefits */
-    .benefits-grid {
+    /* Features Grid */
+    .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
-      margin: 60px 0;
+      margin: 60px 0 40px;
     }
 
-    .benefit-card {
+    .feature-box {
       background: var(--bg-surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 24px;
-      transition: transform 0.25s, border-color 0.25s;
+      padding: 26px;
+      box-shadow: var(--shadow-sm);
     }
 
-    .benefit-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--primary-light);
+    .feature-box:hover {
+      border-color: #0D7377;
+      transform: translateY(-3px);
     }
 
-    .benefit-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background: rgba(20, 255, 236, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: var(--primary-light);
-      margin-bottom: 16px;
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
     }
 
-    /* Interactive Accordion FAQ */
-    .faq-section {
-      padding: 40px 0 60px;
-      max-width: 800px;
-      margin: 0 auto;
+    .feature-box h4 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
     }
 
-    .faq-item {
+    .feature-box p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* FAQ Section */
+    .faq-wrap {
+      max-width: 760px;
+      margin: 50px auto;
+    }
+
+    .faq-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
       border-radius: 14px;
@@ -533,7 +554,7 @@
       overflow: hidden;
     }
 
-    .faq-question {
+    .faq-head {
       padding: 16px 20px;
       cursor: pointer;
       display: flex;
@@ -541,50 +562,61 @@
       align-items: center;
       font-weight: 700;
       font-size: 1.05rem;
+      color: var(--text-title);
     }
 
-    .faq-question span.arrow {
-      transition: transform 0.3s;
-      font-size: 1.2rem;
-      color: var(--primary-light);
-    }
-
-    .faq-item.open .faq-question span.arrow {
-      transform: rotate(180deg);
-    }
-
-    .faq-answer {
+    .faq-body {
       display: none;
       padding: 0 20px 16px;
       color: var(--text-muted);
       font-size: 0.95rem;
-      line-height: 1.6;
     }
 
-    .faq-item.open .faq-answer {
+    .faq-card.open .faq-body {
       display: block;
     }
 
-    /* Bottom Download Banner */
-    .download-banner {
-      background: linear-gradient(135deg, #0D4E52 0%, #071E20 100%);
-      border: 1.5px solid var(--primary-light);
+    /* Final CTA */
+    .final-cta {
+      background: linear-gradient(135deg, #0D7377, #134E4A);
+      color: #FFFFFF;
       border-radius: 24px;
-      padding: 40px 30px;
+      padding: 45px 30px;
       text-align: center;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 30px var(--primary-glow);
-      margin-bottom: 50px;
+      margin: 60px 0 40px;
+      box-shadow: var(--shadow-lg);
     }
 
-    .download-banner h2 {
-      font-size: 2rem;
+    .final-cta h3 {
+      font-size: 2.1rem;
+      color: #FFFFFF;
       margin-bottom: 10px;
     }
 
-    .download-banner p {
-      color: #CBD5E1;
+    .final-cta p {
+      color: #E2E8F0;
+      font-size: 1.1rem;
       max-width: 540px;
       margin: 0 auto 24px;
+    }
+
+    .btn-white {
+      background: #FFFFFF;
+      color: #0D7377;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 900;
+      font-size: 1.15rem;
+      padding: 14px 34px;
+      border-radius: 14px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-white:hover {
+      background: #F1F5F9;
+      transform: translateY(-2px);
     }
 
     /* Footer */
@@ -597,253 +629,231 @@
     }
 
     @media (max-width: 768px) {
-      .phone-frame {
-        width: 100%;
-        max-width: 340px;
+      .hero h2 {
+        font-size: 1.85rem;
       }
-      .hero {
-        padding: 40px 0 20px;
+      .phone-mockup {
+        width: 100%;
+        max-width: 330px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Navbar -->
   <header>
     <div class="container nav-wrap">
       <a href="#" class="brand">
-        <img src="assets/app_icon.jpg" alt="أيقونة مساعد المعلم">
-        <span class="brand-name font-cairo">مساعد المعلم</span>
+        <img src="assets/app_icon.jpg" alt="شعار مساعد المعلم">
+        <div class="brand-text">
+          <h1 class="font-cairo">مساعد المعلم</h1>
+          <span>رفيقك اليومي في الحصص</span>
+        </div>
       </a>
       <div class="nav-actions">
-        <a href="TeacherAssistant.apk" class="nav-download-btn" download>
+        <!-- Light/Dark Toggle -->
+        <button class="theme-toggle-btn" onclick="toggleTheme()" title="تبديل الوضع الليلي / الفاتح" id="themeBtn">
+          ☀️
+        </button>
+        <a href="TeacherAssistant.apk" class="btn-nav-download" download>
           <span>تحميل APK</span>
-          <span style="font-size: 1.1rem;">📥</span>
+          <span>📥</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="hero">
     <div class="container">
       <div class="hero-badge">
-        <span>✨ الإصدار المميز 1.0 — خفيف وسريع وأوفلاين 100%</span>
+        <span>👌 مجاني وسريع وأوفلاين 100% بدون إنترنت</span>
       </div>
 
-      <h1>
-        تطبيقك المتكامل والأسهل<br>
-        <span class="highlight">لإدارة الحصص والطلاب والماليات</span> 📚
-      </h1>
+      <h2>
+        تطبيقك اللي <span class="teal-text">هيريحك في إدارة الحصص</span><br>
+        والطلاب ومصاريفك كلها في مكان واحد 📚
+      </h2>
 
-      <p class="hero-sub">
-        تطبيق مصمم خصيصاً لتيسير عمل المعلمين: رصد الحضور الفوري بنقرة واحدة، استخراج تقارير PDF، متابعة الاشتراكات والدرجات بدون أي اتصال بالإنترنت.
+      <p class="hero-desc">
+        سيبك بقى من كشاكيل الغياب والورق اللي بيضيع! تطبيق مساعد المعلم معمول عشان تسجل غيابك، تتابع درجات العيال، وتحسب فلوسك بضغطة زر واحدة ومن غير ما تحتاج نت خالص.
       </p>
 
       <div class="hero-btns">
-        <a href="TeacherAssistant.apk" class="btn-main" download>
-          <span>تحميل الـ APK المباشر (71.7 MB)</span>
+        <a href="TeacherAssistant.apk" class="btn-primary" download>
+          <span>تحميل التطبيق للـ Android (71.7 MB)</span>
           <span>⬇️</span>
         </a>
-        <a href="#interactive-demo" class="btn-outline">
-          <span>تجربة تفاعلية لشاشات التطبيق</span>
-          <span>📱</span>
+        <a href="#demo" class="btn-secondary">
+          <span>جرب الشاشات بإيدك 👇</span>
         </a>
       </div>
 
-      <div class="pills-strip">
-        <div class="pill-item">
-          <span>🔒 أوفلاين 100% بدون إنترنت</span>
-        </div>
-        <div class="pill-item">
-          <span>📄 عارض ومستخرج تقارير PDF</span>
-        </div>
-        <div class="pill-item">
-          <span>💾 نسخ احتياطي بذاكرة الهاتف</span>
-        </div>
-        <div class="pill-item">
-          <span>⚡ فائق السرعة وخفيف</span>
-        </div>
+      <div class="badges-strip">
+        <div class="badge-card">⚡ سريع وخفيف جداً على الموبايل</div>
+        <div class="badge-card">🔒 شغال 100% من غير نت</div>
+        <div class="badge-card">📄 بيطلع تقارير PDF جاهزة للطباعة</div>
+        <div class="badge-card">💾 نسختك الاحتياطية متسيفة في تليفونك</div>
       </div>
     </div>
   </section>
 
-  <!-- Interactive App Showcase -->
-  <section class="showcase-section" id="interactive-demo">
+  <!-- Interactive App Simulator -->
+  <section class="showcase-section" id="demo">
     <div class="container">
-      <div class="section-title">
-        <h2 class="font-cairo">استكشف التطبيق وتفاعل معه مباشرة 🎮</h2>
-        <p>اضغط على أي قسم لمعاينة الشاشة وتجربة طريقة عملها الحقيقية</p>
+      <div class="section-head">
+        <h3>جرب التطبيق بإيدك وشوف السهولة 📱</h3>
+        <p>دوس على أي شاشة تحت وجرب تدوس على زراير الغياب والتقارير!</p>
       </div>
 
-      <!-- Tabs Navigation -->
-      <div class="tabs-nav">
-        <button class="tab-btn active" onclick="switchMockTab('home')">
-          <span>🏠 الرئيسية والحصص</span>
-        </button>
-        <button class="tab-btn" onclick="switchMockTab('attendance')">
-          <span>✍️ رصد الحضور التفاعلي</span>
-        </button>
-        <button class="tab-btn" onclick="switchMockTab('pdf')">
-          <span>📄 عارض تقارير PDF</span>
-        </button>
-        <button class="tab-btn" onclick="switchMockTab('finance')">
-          <span>💰 المالية والاشتراكات</span>
-        </button>
-        <button class="tab-btn" onclick="switchMockTab('certs')">
-          <span>🎓 الشهادات ولوحة الشرف</span>
-        </button>
+      <!-- Tab Buttons -->
+      <div class="tab-pills">
+        <button class="tab-item active" onclick="showTab('home')">🏠 الصفحة الرئيسية</button>
+        <button class="tab-item" onclick="showTab('attendance')">✍️ رصد الحضور (جرب بنفسك)</button>
+        <button class="tab-item" onclick="showTab('pdf')">📄 عارض تقارير الـ PDF</button>
+        <button class="tab-item" onclick="showTab('finance')">💰 الحسابات والاشتراكات</button>
+        <button class="tab-item" onclick="showTab('certs')">🎓 شهادات التفوق</button>
       </div>
 
-      <!-- Interactive Phone Mockup & Description -->
-      <div class="device-container">
+      <!-- Simulator Layout -->
+      <div class="showcase-layout">
         
         <!-- Phone Frame -->
-        <div class="phone-frame">
-          <!-- Status Bar -->
-          <div class="phone-top-bar">
-            <span>09:41</span>
-            <div class="phone-notch"></div>
+        <div class="phone-mockup">
+          <div class="phone-notch-bar">
+            <span>04:30 PM</span>
+            <div class="phone-notch-center"></div>
             <span>100% 🔋</span>
           </div>
 
-          <!-- Screen Container -->
-          <div class="phone-screen">
-
-            <!-- 1. Home Screen Mockup -->
-            <div id="view-home" class="screen-view active">
-              <div class="mock-header">
-                <div class="mock-header-row">
+          <div class="phone-body">
+            
+            <!-- 1. Home Mock -->
+            <div id="mock-home" class="mock-view active">
+              <div class="mock-card-header">
+                <div class="flex-row">
                   <div>
-                    <div style="font-size: 11px; opacity: 0.85;">صباح الخير ☀️</div>
-                    <div style="font-weight: 800; font-size: 15px;">أ. أحمد محمود</div>
+                    <div style="font-size: 11px; opacity: 0.9;">مساء الخير يا مستر ☀️</div>
+                    <div style="font-weight: 900; font-size: 15px;">أ. أحمد محمود</div>
                   </div>
-                  <div style="background: rgba(255,255,255,0.2); padding: 5px 8px; border-radius: 8px; font-size: 11px;">
-                    🔔 2 تنبيه
+                  <div style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 8px; font-size: 11px;">
+                    🔔 2 تنبيهات
                   </div>
                 </div>
               </div>
 
-              <!-- Upcoming Class Card -->
-              <div class="mock-card" style="background: linear-gradient(135deg, #0D7377, #14FFEC); color: #041618;">
-                <div class="mock-row">
-                  <span style="font-weight: 800; font-size: 12px;">⏰ الحصة القادمة: 04:30 م</span>
-                  <span class="badge-tag" style="background: #041618; color: #14FFEC;">جارية</span>
+              <!-- Next Class Card -->
+              <div class="mock-card" style="border-right: 4px solid #0D7377;">
+                <div class="flex-row">
+                  <span style="font-weight: 800; font-size: 12px; color: #0D7377;">⏰ حصتك اللي عليها الدور:</span>
+                  <span class="tag-badge tag-teal">جارية الآن</span>
                 </div>
                 <div style="font-weight: 900; font-size: 15px; margin-top: 4px;">مجموعة العباقرة (3 ثانوي)</div>
-                <div style="font-size: 11px; opacity: 0.85; margin-top: 2px;">📖 فيزياء · 28 طالب</div>
+                <div style="font-size: 11px; color: var(--text-muted);">📖 فيزياء · 28 طالب حاضرين</div>
               </div>
 
-              <!-- Quick Note Card -->
+              <!-- Today Note -->
               <div class="mock-card">
-                <div class="mock-row" style="margin-bottom: 4px;">
-                  <span style="font-weight: 700; font-size: 12px; color: var(--primary-light);">📝 مهمة وملاحظة اليوم</span>
-                </div>
-                <div style="font-size: 12px; color: #E2E8F0;">تسليم درجات اختبار الفصل الأول وطباعة الشهادات</div>
+                <div style="font-weight: 800; font-size: 12px; color: #F59E0B; margin-bottom: 2px;">📝 تذكير مهمة اليوم:</div>
+                <div style="font-size: 12px;">تسليم درجات كويز الفصل الأول وتكريم الأوائل</div>
               </div>
 
-              <!-- Groups List Mini -->
-              <div style="font-weight: 800; font-size: 12px; color: var(--text-muted); margin-top: 4px;">مجموعات اليوم (3)</div>
-              <div class="mock-card">
-                <div class="mock-row">
-                  <div>
-                    <div style="font-weight: 700; font-size: 12px;">مجموعة النخبة A</div>
-                    <div style="font-size: 10.5px; color: #94A3B8;">02:00 م - 03:30 م</div>
-                  </div>
-                  <span class="badge-tag badge-green">تم التحضير ✓</span>
+              <!-- Today Groups -->
+              <div style="font-size: 12px; font-weight: 800; color: var(--text-muted); margin-top: 4px;">حصصك النهاردة:</div>
+              <div class="mock-card flex-row">
+                <div>
+                  <div style="font-weight: 700; font-size: 12px;">مجموعة النخبة A</div>
+                  <div style="font-size: 10.5px; color: var(--text-muted);">02:00 م - 03:30 م</div>
                 </div>
+                <span class="tag-badge tag-green">تم التحضير ✓</span>
               </div>
-              <div class="mock-card">
-                <div class="mock-row">
-                  <div>
-                    <div style="font-weight: 700; font-size: 12px;">مجموعة الأوائل B</div>
-                    <div style="font-size: 10.5px; color: #94A3B8;">06:00 م - 07:30 م</div>
-                  </div>
-                  <span class="badge-tag badge-gold">متبقية ⏳</span>
+              <div class="mock-card flex-row">
+                <div>
+                  <div style="font-weight: 700; font-size: 12px;">مجموعة الأوائل B</div>
+                  <div style="font-size: 10.5px; color: var(--text-muted);">06:00 م - 07:30 م</div>
                 </div>
+                <span class="tag-badge tag-gold">في انتظارك ⏳</span>
               </div>
             </div>
 
-            <!-- 2. Attendance Screen Mockup (INTERACTIVE) -->
-            <div id="view-attendance" class="screen-view">
-              <div class="mock-card" style="background: #0E292D;">
-                <div class="mock-row">
+            <!-- 2. Attendance Mock (INTERACTIVE) -->
+            <div id="mock-attendance" class="mock-view">
+              <div class="mock-card" style="background: var(--primary-subtle);">
+                <div class="flex-row">
                   <div>
-                    <div style="font-weight: 800; font-size: 13px;">رصد حضور: مجموعة العباقرة</div>
-                    <div style="font-size: 11px; color: #94A3B8;">جرب الضغط على أزرار الطلاب 👇</div>
+                    <div style="font-weight: 800; font-size: 13px; color: #0D7377;">رصد حضور: مجموعة العباقرة</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">دوس على زراير الطلاب وجرب بنفسك 👇</div>
                   </div>
-                  <span class="badge-tag badge-teal" id="live-att-rate">نسبة الحضور: 85%</span>
+                  <span class="tag-badge tag-teal" id="rate-badge">حضور: 75%</span>
                 </div>
               </div>
 
               <!-- Student 1 -->
-              <div class="mock-student-item">
+              <div class="student-item">
                 <div>
                   <div style="font-weight: 700; font-size: 12px;">1. عمر خالد محمد</div>
-                  <div style="font-size: 10px; color: #94A3B8;">⭐ 95 نقطة</div>
+                  <div style="font-size: 10px; color: var(--text-muted);">⭐ 95 نقطة</div>
                 </div>
-                <div class="mock-btn-group">
-                  <button class="mock-btn-action btn-present selected" onclick="toggleAtt(this, 'present')">حاضر</button>
-                  <button class="mock-btn-action btn-absent" onclick="toggleAtt(this, 'absent')">غائب</button>
-                  <button class="mock-btn-action btn-hw selected" onclick="toggleHw(this)">واجب ✓</button>
+                <div style="display:flex; gap:4px;">
+                  <button class="btn-action btn-act-present active" onclick="setAtt(this, 'present')">حاضر</button>
+                  <button class="btn-action btn-act-absent" onclick="setAtt(this, 'absent')">غائب</button>
+                  <button class="btn-action btn-act-hw active" onclick="setHw(this)">واجب ✓</button>
                 </div>
               </div>
 
               <!-- Student 2 -->
-              <div class="mock-student-item">
+              <div class="student-item">
                 <div>
                   <div style="font-weight: 700; font-size: 12px;">2. يوسف أحمد علي</div>
-                  <div style="font-size: 10px; color: #94A3B8;">⭐ 88 نقطة</div>
+                  <div style="font-size: 10px; color: var(--text-muted);">⭐ 88 نقطة</div>
                 </div>
-                <div class="mock-btn-group">
-                  <button class="mock-btn-action btn-present" onclick="toggleAtt(this, 'present')">حاضر</button>
-                  <button class="mock-btn-action btn-absent selected" onclick="toggleAtt(this, 'absent')">غائب</button>
-                  <button class="mock-btn-action btn-hw" onclick="toggleHw(this)">واجب</button>
+                <div style="display:flex; gap:4px;">
+                  <button class="btn-action btn-act-present" onclick="setAtt(this, 'present')">حاضر</button>
+                  <button class="btn-action btn-act-absent active" onclick="setAtt(this, 'absent')">غائب</button>
+                  <button class="btn-action btn-act-hw" onclick="setHw(this)">واجب</button>
                 </div>
               </div>
 
               <!-- Student 3 -->
-              <div class="mock-student-item">
+              <div class="student-item">
                 <div>
                   <div style="font-weight: 700; font-size: 12px;">3. سارة محمود إبراهيم</div>
-                  <div style="font-size: 10px; color: #94A3B8;">⭐ 100 نقطة (الأولى)</div>
+                  <div style="font-size: 10px; color: var(--text-muted);">⭐ 100 نقطة (الأولى)</div>
                 </div>
-                <div class="mock-btn-group">
-                  <button class="mock-btn-action btn-present selected" onclick="toggleAtt(this, 'present')">حاضر</button>
-                  <button class="mock-btn-action btn-absent" onclick="toggleAtt(this, 'absent')">غائب</button>
-                  <button class="mock-btn-action btn-hw selected" onclick="toggleHw(this)">واجب ✓</button>
+                <div style="display:flex; gap:4px;">
+                  <button class="btn-action btn-act-present active" onclick="setAtt(this, 'present')">حاضر</button>
+                  <button class="btn-action btn-act-absent" onclick="setAtt(this, 'absent')">غائب</button>
+                  <button class="btn-action btn-act-hw active" onclick="setHw(this)">واجب ✓</button>
                 </div>
               </div>
 
               <!-- Student 4 -->
-              <div class="mock-student-item">
+              <div class="student-item">
                 <div>
                   <div style="font-weight: 700; font-size: 12px;">4. زياد طارق حسن</div>
-                  <div style="font-size: 10px; color: #94A3B8;">⭐ 82 نقطة</div>
+                  <div style="font-size: 10px; color: var(--text-muted);">⭐ 82 نقطة</div>
                 </div>
-                <div class="mock-btn-group">
-                  <button class="mock-btn-action btn-present selected" onclick="toggleAtt(this, 'present')">حاضر</button>
-                  <button class="mock-btn-action btn-absent" onclick="toggleAtt(this, 'absent')">غائب</button>
-                  <button class="mock-btn-action btn-hw" onclick="toggleHw(this)">واجب</button>
+                <div style="display:flex; gap:4px;">
+                  <button class="btn-action btn-act-present active" onclick="setAtt(this, 'present')">حاضر</button>
+                  <button class="btn-action btn-act-absent" onclick="setAtt(this, 'absent')">غائب</button>
+                  <button class="btn-action btn-act-hw active" onclick="setHw(this)">واجب ✓</button>
                 </div>
               </div>
             </div>
 
-            <!-- 3. PDF Viewer Mockup -->
-            <div id="view-pdf" class="screen-view">
-              <div class="mock-card" style="background: #1E293B; border-color: #334155;">
-                <div class="mock-row">
-                  <span style="font-weight: 800; font-size: 12px; color: #38BDF8;">📄 عارض الـ PDF المدمج</span>
-                  <div style="display:flex; gap:6px;">
-                    <span class="badge-tag" style="background:#0284C7; color:#fff; cursor:pointer;">🖨️ طباعة</span>
-                    <span class="badge-tag" style="background:#0D9488; color:#fff; cursor:pointer;">📤 مشاركة</span>
-                  </div>
+            <!-- 3. PDF Mock -->
+            <div id="mock-pdf" class="mock-view">
+              <div class="mock-card flex-row" style="background: #0284C7; color: #fff;">
+                <span style="font-weight: 800; font-size: 12px;">📄 عارض ومستعرض الـ PDF</span>
+                <div style="display:flex; gap:4px;">
+                  <span style="background: rgba(255,255,255,0.25); padding: 3px 6px; border-radius: 4px; font-size: 10px; cursor:pointer;">🖨️ طباعة</span>
+                  <span style="background: rgba(255,255,255,0.25); padding: 3px 6px; border-radius: 4px; font-size: 10px; cursor:pointer;">📤 مشاركة</span>
                 </div>
               </div>
 
-              <!-- Fake PDF Page Sheet -->
-              <div style="background: #FFFFFF; color: #0F172A; border-radius: 10px; padding: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-size: 11px;">
+              <!-- PDF Report Paper -->
+              <div style="background: #FFFFFF; color: #0F172A; border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px; font-size: 11px;">
                 <div style="text-align: center; font-weight: 900; font-size: 13px; color: #0D7377; border-bottom: 2px solid #0D7377; padding-bottom: 4px; margin-bottom: 8px;">
                   تقرير أداء الطالب الشامل
                 </div>
@@ -852,99 +862,85 @@
                   <span><b>المجموعة:</b> العباقرة</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                  <span><b>نسبة الحضور:</b> 94%</span>
-                  <span><b>مجموع الدرجات:</b> 48 / 50</span>
+                  <span><b>حضور الشهر:</b> 95%</span>
+                  <span><b>درجة الامتحان:</b> 49 / 50</span>
                 </div>
-                <div style="background: #F1F5F9; border-radius: 6px; padding: 6px; margin-bottom: 6px; font-size: 10px;">
-                  📊 <b>ملاحظة المعلم:</b> طالب متميز جداً وملتزم بكافة الواجبات والأنشطة الصفية.
-                </div>
-                <div style="text-align: center; font-size: 9px; color: #64748B; margin-top: 8px;">
-                  تم استخراج التقرير بواسطة تطبيق مُساعِد المُعلِّم
+                <div style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 6px; padding: 6px; font-size: 10px; color: #334155;">
+                  🌟 <b>رأي المعلم:</b> ما شاء الله طالب ممتاز ومشارك دايماً في كل الحصص.
                 </div>
               </div>
             </div>
 
-            <!-- 4. Finance Screen Mockup -->
-            <div id="view-finance" class="screen-view">
-              <div class="mock-card" style="background: linear-gradient(135deg, #064E3B, #022C22);">
-                <div class="mock-row">
+            <!-- 4. Finance Mock -->
+            <div id="mock-finance" class="mock-view">
+              <div class="mock-card-header" style="background: #047857;">
+                <div class="flex-row">
                   <div>
-                    <div style="font-size: 11px; color: #A7F3D0;">إجمالي المحصل لشهر أغسطس</div>
-                    <div style="font-weight: 900; font-size: 18px; color: #34D399;">14,500 ج.م</div>
+                    <div style="font-size: 11px; opacity: 0.9;">فلوس الشهر (المحصل):</div>
+                    <div style="font-weight: 900; font-size: 18px;">14,500 ج.م</div>
                   </div>
                   <div style="text-align: left;">
-                    <div style="font-size: 10px; color: #FCA5A5;">المتبقي</div>
-                    <div style="font-weight: 800; font-size: 13px; color: #F87171;">1,200 ج.م</div>
+                    <div style="font-size: 10px; opacity: 0.85;">المتبقي بره:</div>
+                    <div style="font-weight: 800; font-size: 13px; color: #FECDD3;">1,200 ج.م</div>
                   </div>
                 </div>
               </div>
 
-              <!-- Finance Group Items -->
-              <div class="mock-card">
-                <div class="mock-row">
-                  <div>
-                    <div style="font-weight: 700; font-size: 12px;">مجموعة العباقرة (28 طالب)</div>
-                    <div style="font-size: 10.5px; color: #94A3B8;">تم تحصيل: 26 طالب · متبقي: 2</div>
-                  </div>
-                  <span class="badge-tag badge-green">92% مكتمل</span>
+              <div class="mock-card flex-row">
+                <div>
+                  <div style="font-weight: 700; font-size: 12px;">مجموعة العباقرة (28 طالب)</div>
+                  <div style="font-size: 10.5px; color: var(--text-muted);">دفع: 26 · متبقي: 2</div>
                 </div>
+                <span class="tag-badge tag-green">93% تمام ✓</span>
               </div>
 
-              <div class="mock-card">
-                <div class="mock-row">
-                  <div>
-                    <div style="font-weight: 700; font-size: 12px;">مجموعة النخبة (22 طالب)</div>
-                    <div style="font-size: 10.5px; color: #94A3B8;">تم تحصيل: 22 طالب · متبقي: 0</div>
-                  </div>
-                  <span class="badge-tag badge-green">100% مكتمل ✓</span>
+              <div class="mock-card flex-row">
+                <div>
+                  <div style="font-weight: 700; font-size: 12px;">مجموعة النخبة (20 طالب)</div>
+                  <div style="font-size: 10.5px; color: var(--text-muted);">الكل دفع بالكامل</div>
                 </div>
+                <span class="tag-badge tag-green">100% مكتمل ✓</span>
               </div>
             </div>
 
-            <!-- 5. Certificates Screen Mockup -->
-            <div id="view-certs" class="screen-view">
-              <div class="mock-card" style="background: linear-gradient(135deg, #78350F, #451A03); color:#fff;">
-                <div class="mock-row">
-                  <div>
-                    <div style="font-weight: 800; font-size: 13px;">🎓 شهادات التقدير والتفوق</div>
-                    <div style="font-size: 10.5px; color:#FDE68A;">نماذج جاهزة وتصميم مخصص HD</div>
-                  </div>
-                  <span class="badge-tag badge-gold">شهادة HD</span>
-                </div>
+            <!-- 5. Certs Mock -->
+            <div id="mock-certs" class="mock-view">
+              <div class="mock-card flex-row" style="background: #D97706; color: #fff;">
+                <span style="font-weight: 800; font-size: 12px;">🎓 شهادات التقدير بأسماء الطلاب</span>
+                <span style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; font-size: 10px;">HD جاهزة</span>
               </div>
 
-              <!-- Certificate Preview Box -->
-              <div style="background: #FFFBEB; border: 2px dashed #D97706; border-radius: 12px; padding: 12px; text-align: center; color: #78350F;">
-                <div style="font-size: 14px;">🌟 شهادة تميز وتفوق 🌟</div>
-                <div style="font-size: 10px; color: #92400E; margin: 4px 0;">تُمنح هذه الشهادة للطالب المتميز:</div>
+              <div style="background: #FFFBEB; border: 2px dashed #D97706; border-radius: 10px; padding: 12px; text-align: center; color: #78350F;">
+                <div style="font-size: 13px; font-weight: bold;">🌟 شهادة تفوق وتقدير 🌟</div>
+                <div style="font-size: 10px; margin: 3px 0;">تُهدى للطالبة المتميزة:</div>
                 <div style="font-size: 13px; font-weight: 900; color: #B45309;">سارة محمود إبراهيم</div>
-                <div style="font-size: 9.5px; color: #78350F; margin-top: 4px;">لحصولها على المركز الأول والدرجة النهائية</div>
+                <div style="font-size: 9.5px; margin-top: 4px;">للحصول على المركز الأول والدرجة النهائية</div>
               </div>
             </div>
 
           </div>
         </div>
 
-        <!-- Explanatory Panel Beside Phone -->
-        <div class="showcase-desc-box">
-          <div id="desc-home" class="desc-item-card highlighted">
-            <h3 class="font-cairo"><span>🏠</span> واجهة رئيسية ذكية وخالية من المشتتات</h3>
-            <p>عرض مباشر وفوري لحصص اليوم، وتنبيهات الحصص القادمة، ومذكرات اليوم، مع إمكانية التحضير السريع بلمسة واحدة.</p>
+        <!-- Explanations Beside Phone -->
+        <div class="details-panel">
+          <div id="desc-home" class="detail-card active">
+            <h4 class="font-cairo">🏠 صفحة رئيسية منظمة ورايقة</h4>
+            <p>بتفتح التطبيق تلاقي حصتك اللي عليها الدور قدام عينك على طول، وتذكيرات بملاحظاتك والواجبات، من غير أي دوشة أو إعلانات.</p>
           </div>
 
-          <div id="desc-attendance" class="desc-item-card">
-            <h3 class="font-cairo"><span>✍️</span> رصد الغياب والواجبات بنقرة واحدة</h3>
-            <p>تسجيل الحضور أسرع بـ 10 مرات من الكشوف الورقية، مع حساب نسب الحضور التراكمية وتنبيهات فورية عند تكرار الغياب.</p>
+          <div id="desc-attendance" class="detail-card">
+            <h4 class="font-cairo">✍️ خد الغياب والواجب في ثواني</h4>
+            <p>بدل ما تقعد تنده بالاسم، بضغطة واحدة على اسم الطالب بتعلم حاضر أو غائب أو عمل الواجب، والتطبيق بيحسبلك النسب أوتوماتيك.</p>
           </div>
 
-          <div id="desc-pdf" class="desc-item-card">
-            <h3 class="font-cairo"><span>📄</span> عارض ومستخرج تقارير PDF المدمج</h3>
-            <p>إمكانية فتح وتصفح أي ملف PDF داخل التطبيق وطباعة ومشاركة تقارير أداء الطلاب الشاملة مع أولياء الأمور بسهولة.</p>
+          <div id="desc-pdf" class="detail-card">
+            <h4 class="font-cairo">📄 عارض ومستخرج الـ PDF</h4>
+            <p>تقدر تفتح وتتصفح أي ملف PDF أو مذكرات جوه التطبيق، وتطبع شيتات تقارير كاملة لكل طالب تبعتها لولي أمره على الواتساب.</p>
           </div>
 
-          <div id="desc-finance" class="desc-item-card">
-            <h3 class="font-cairo"><span>💰</span> متابعة الاشتراكات والماليات</h3>
-            <p>تتبع اشتراكات كل طالب والمبالغ المستحقة والمدفوعة، وحساب الخصومات والإعفاءات مع تقارير مالية شهرية تفصيلية.</p>
+          <div id="desc-finance" class="detail-card">
+            <h4 class="font-cairo">💰 حساباتك ومصاريفك متظبطة بالقرش</h4>
+            <p>هتعرف مين دفع اشتراك الشهر ومين متبقي عليه فلوس، وتقدر تحسب خصومات الإخوة والإعفاءات من غير ما تتلخبط.</p>
           </div>
         </div>
 
@@ -952,75 +948,97 @@
     </div>
   </section>
 
-  <!-- Key Benefits Grid -->
+  <!-- Key Features Grid -->
   <section class="container">
-    <div class="benefits-grid">
-      <div class="benefit-card">
-        <div class="benefit-icon">🔒</div>
-        <h3 class="font-cairo" style="font-size: 1.2rem; margin-bottom: 8px;">أوفلاين 100% بدون إنترنت</h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">بياناتك ودروسك وطلابك محفوظة على جهازك وتعمل في أي وقت بدون الحاجة لاتصال بالإنترنت.</p>
+    <div class="section-head">
+      <h3>ليه تعتمد على "مساعد المعلم" في يومك؟ 🌟</h3>
+      <p>صنعناه مخصوص عشان يوفر وقتك ومجهودك في الحصص والدروس</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-box">
+        <div class="feature-icon">🔒</div>
+        <h4 class="font-cairo">شغال من غير نت 100%</h4>
+        <p>مش محتاج يكون معاك باقة أو واي فاي في السنتر أو الفصل، بياناتك كلها متسيفة على جهازك وشغالة في أي لحظة.</p>
       </div>
 
-      <div class="benefit-card">
-        <div class="benefit-icon">💾</div>
-        <h3 class="font-cairo" style="font-size: 1.2rem; margin-bottom: 8px;">نسخ احتياطي فوري بالهاتف</h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">حفظ النسخ الاحتياطية مباشرة في ذاكرة هاتفك بأمان، مع إمكانية استرجاعها أو نقلها لهاتف جديد بضغطة زر.</p>
+      <div class="feature-box">
+        <div class="feature-icon">💾</div>
+        <h4 class="font-cairo">نسخة احتياطية على تليفونك</h4>
+        <p>بضغطة زرار واحدة تقدر تاخد نسخة احتياطية من كل بياناتك وتحفظها على الموبايل أو تبعتها على الواتساب براحتك.</p>
       </div>
 
-      <div class="benefit-card">
-        <div class="benefit-icon">📱</div>
-        <h3 class="font-cairo" style="font-size: 1.2rem; margin-bottom: 8px;">قوالب رسائل واتساب</h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">إرسال تقارير الغياب والدرجات لأولياء الأمور برسائل واتساب مجهزة ومخصصة تلقائياً باسم الطالب.</p>
+      <div class="feature-box">
+        <div class="feature-icon">💬</div>
+        <h4 class="font-cairo">رسائل واتساب جاهزة لأولياء الأمور</h4>
+        <p>قوالب رسائل جاهزة باسم الطالب وغيابه ودرجاته، تدوس إرسال تفتح شات ولي الأمر على طول في ثانية.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feature-icon">🎓</div>
+        <h4 class="font-cairo">لوحة الشرف وتكريم الأوائل</h4>
+        <p>التطبيق بيحسب نقط التميز والدرجات ويرتبلك الطلاب الأوائل مع شهادات تقدير شيك تطبعها وتفرحهم بيها.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feature-icon">⚡</div>
+        <h4 class="font-cairo">سريع وخفيف جداً</h4>
+        <p>التطبيق خفيف وسلس ومبيسخنش التليفون ولا بيستهلك بطارية، معمول بأعلى كفاءة في الاستخدام.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feature-icon">🗑️</div>
+        <h4 class="font-cairo">سلة مهملات وأمان لبياناتك</h4>
+        <p>لو مسحت طالب أو مجموعة بالغلط متقلقش، عندك سلة مهملات تقدر تسترجع منها أي حاجة في ثواني.</p>
       </div>
     </div>
   </section>
 
-  <!-- FAQ Section -->
-  <section class="container faq-section">
-    <div class="section-title">
-      <h2 class="font-cairo">الأسئلة الشائعة ❓</h2>
-      <p>كل ما تحتاج معرفته عن تطبيق مساعد المعلم</p>
+  <!-- FAQ -->
+  <section class="container faq-wrap">
+    <div class="section-head">
+      <h3>أسئلة شائعة وإجاباتها 💡</h3>
     </div>
 
-    <div class="faq-item open">
-      <div class="faq-question" onclick="toggleFaq(this)">
-        <span>هل يحتاج التطبيق إلى اتصال دائم بالإنترنت؟</span>
-        <span class="arrow">▼</span>
+    <div class="faq-card open">
+      <div class="faq-head" onclick="toggleFaqCard(this)">
+        <span>هو التطبيق محتاج إنترنت عشان يشتغل؟</span>
+        <span>▼</span>
       </div>
-      <div class="faq-answer">
-        لا، التطبيق مصمم ليعمل بدون إنترنت بنسبة 100%. كافة بيانات الطلاب والحصص والدرجات والماليات تُخزن محلياً على هاتفك بأمان تام.
-      </div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-question" onclick="toggleFaq(this)">
-        <span>كيف أقوم بتثبيت التطبيق على هاتفي الأندرويد؟</span>
-        <span class="arrow">▼</span>
-      </div>
-      <div class="faq-answer">
-        ببساطة اضغط على زر "تحميل الـ APK المباشر" في أعلى الصفحة، وعند اكتمال التحميل افتح الملف واضغط "تثبيت". إذا طُلب منك السماح بتثبيت التطبيقات من مصادر غير معروفة، وافق عليها.
+      <div class="faq-body">
+        لا خالص! التطبيق شغال أوفلاين 100% بدون أي حاجة للإنترنت. كل بياناتك متسيفة بأمان على ذاكرة تليفونك.
       </div>
     </div>
 
-    <div class="faq-item">
-      <div class="faq-question" onclick="toggleFaq(this)">
-        <span>كيف أضمن عدم ضياع بياناتي في حال تغيير الهاتف؟</span>
-        <span class="arrow">▼</span>
+    <div class="faq-card">
+      <div class="faq-head" onclick="toggleFaqCard(this)">
+        <span>إزاي أنزل التطبيق وأثبته على الموبايل؟</span>
+        <span>▼</span>
       </div>
-      <div class="faq-answer">
-        يتضمن التطبيق خاصية النسخ الاحتياطي التلقائي والمحلي؛ يمكنك أخذ نسخة احتياطية وحفظها في ذاكرة الهاتف أو إرسالها إلى Google Drive أو WhatsApp واسترجاعها على أي هاتف آخر في ثوانٍ.
+      <div class="faq-body">
+        اضغط على زر "تحميل التطبيق للـ Android" من الصفحة هنا، وأول ما يخلص تحميل افتح الملف واضغط "تثبيت". لو الموبايل سألك عن السماح بالتثبيت من المتصفح وافق عليها وهينزل معاك في ثواني.
+      </div>
+    </div>
+
+    <div class="faq-card">
+      <div class="faq-head" onclick="toggleFaqCard(this)">
+        <span>لو غيرت تليفوني إزاي انقل بياناتي؟</span>
+        <span>▼</span>
+      </div>
+      <div class="faq-body">
+        من شاشة الإعدادات جوه التطبيق، اضغط على "نسخ احتياطي للبيانات" واحفظ الملف على تليفونك أو ابعته لنفسك على الواتساب، وعلى التليفون الجديد نزل التطبيق واضغط "استعادة البيانات" واختار الملف هتلاقي كل حاجة رجعت في ثواني.
       </div>
     </div>
   </section>
 
-  <!-- Bottom CTA Download Banner -->
+  <!-- Final CTA -->
   <section class="container">
-    <div class="download-banner">
-      <h2 class="font-cairo">جاهز لتنظيم حصصك وطلابك باحترافية؟ 🚀</h2>
-      <p>حمّل تطبيق مساعد المعلم الآن مجاناً وابدأ إدارة تدريسك بسهولة ودقة وسرعة فائقة.</p>
-      <a href="TeacherAssistant.apk" class="btn-main" download>
-        <span>تحميل التطبيق الآن (APK مباشر)</span>
-        <span style="font-size: 1.3rem;">⬇️</span>
+    <div class="final-cta">
+      <h3 class="font-cairo">جاهز تريح نفسك وتظبط حصصك؟ 🚀</h3>
+      <p>حمّل تطبيق مساعد المعلم دلوقتي مجاناً وابدأ تنظيم شغلك بأسهل وأسرع طريقة ممكنة.</p>
+      <a href="TeacherAssistant.apk" class="btn-white" download>
+        <span>تحميل التطبيق فوراً (APK مجاني)</span>
+        <span>📥</span>
       </a>
     </div>
   </section>
@@ -1029,60 +1047,76 @@
   <footer>
     <div class="container">
       <p>© 2026 تطبيق مساعد المعلم — Teacher Assistant App. جميع الحقوق محفوظة.</p>
-      <p style="margin-top: 6px; font-size: 0.85rem; color: #64748B;">تم التطوير بأحدث تقنيات Flutter لتوفير تجربة خفيفة وسريعة تدعم رسالة المعلم.</p>
+      <p style="margin-top: 4px; font-size: 0.85rem;">صُنع بحب لدعم وتيسير رسالة كل معلم في مصر والوطن العربي ❤️</p>
     </div>
   </footer>
 
-  <!-- Interactive Logic JS (Ultra Lightweight - Zero Dependencies) -->
+  <!-- Scripts: Theme Toggle & Interactive Demo -->
   <script>
-    // Tab switching in interactive simulator
-    function switchMockTab(tabName) {
-      // Buttons active state
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      event.currentTarget.classList.add('active');
-
-      // Screens active state
-      document.querySelectorAll('.screen-view').forEach(view => view.classList.remove('active'));
-      const targetView = document.getElementById('view-' + tabName);
-      if (targetView) targetView.classList.add('active');
-
-      // Side cards highlight
-      document.querySelectorAll('.desc-item-card').forEach(card => card.classList.remove('highlighted'));
-      const targetDesc = document.getElementById('desc-' + tabName);
-      if (targetDesc) targetDesc.classList.add('highlighted');
+    // Theme Toggle Functionality (Light Default)
+    function initTheme() {
+      const savedTheme = localStorage.getItem('ta_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
     }
 
-    // Attendance toggle simulation
-    function toggleAtt(btn, type) {
-      const parent = btn.parentElement;
-      parent.querySelectorAll('.mock-btn-action').forEach(b => {
-        if (b.classList.contains('btn-present') || b.classList.contains('btn-absent')) {
-          b.classList.remove('selected');
-        }
-      });
-      btn.classList.add('selected');
-      updateAttendanceRate();
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('ta_theme', next);
+      updateThemeIcon(next);
     }
 
-    function toggleHw(btn) {
-      btn.classList.toggle('selected');
-      btn.textContent = btn.classList.contains('selected') ? 'واجب ✓' : 'واجب';
-    }
-
-    function updateAttendanceRate() {
-      const presentCount = document.querySelectorAll('#view-attendance .btn-present.selected').length;
-      const total = 4;
-      const rate = Math.round((presentCount / total) * 100);
-      const rateBadge = document.getElementById('live-att-rate');
-      if (rateBadge) {
-        rateBadge.textContent = 'نسبة الحضور: ' + rate + '%';
+    function updateThemeIcon(theme) {
+      const btn = document.getElementById('themeBtn');
+      if (btn) {
+        btn.textContent = theme === 'dark' ? '🌙' : '☀️';
       }
     }
 
-    // FAQ Accordion Toggle
-    function toggleFaq(questionEl) {
-      const item = questionEl.parentElement;
-      item.classList.toggle('open');
+    initTheme();
+
+    // Tab switcher in simulator
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-item').forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.querySelectorAll('.mock-view').forEach(v => v.classList.remove('active'));
+      const activeView = document.getElementById('mock-' + tabId);
+      if (activeView) activeView.classList.add('active');
+
+      document.querySelectorAll('.detail-card').forEach(c => c.classList.remove('active'));
+      const activeDesc = document.getElementById('desc-' + tabId);
+      if (activeDesc) activeDesc.classList.add('active');
+    }
+
+    // Attendance interactive toggle
+    function setAtt(btn, state) {
+      const group = btn.parentElement;
+      group.querySelectorAll('.btn-act-present, .btn-act-absent').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      recalcRate();
+    }
+
+    function setHw(btn) {
+      btn.classList.toggle('active');
+      btn.textContent = btn.classList.contains('active') ? 'واجب ✓' : 'واجب';
+    }
+
+    function recalcRate() {
+      const presents = document.querySelectorAll('#mock-attendance .btn-act-present.active').length;
+      const pct = Math.round((presents / 4) * 100);
+      const rateBadge = document.getElementById('rate-badge');
+      if (rateBadge) {
+        rateBadge.textContent = 'حضور: ' + pct + '%';
+      }
+    }
+
+    // FAQ Toggle
+    function toggleFaqCard(headEl) {
+      const card = headEl.parentElement;
+      card.classList.toggle('open');
     }
   </script>
 
