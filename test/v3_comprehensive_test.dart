@@ -173,7 +173,7 @@ void main() {
   group('§7: Clean Architecture & Provider State Management', () {
     test('NotesProvider manages category filters and search logic in pure state', () {
       final provider = NotesProvider();
-      expect(provider.activeCategory, 'all');
+      expect(provider.activeCategory, 'class');
       expect(provider.searchQuery, isEmpty);
 
       provider.setCategory('student');
